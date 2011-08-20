@@ -1,0 +1,1 @@
+extern double get_min_parsimony_score(long numSeq, long len, char** sequences);

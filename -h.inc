@@ -1,0 +1,1 @@
+char* -h_string=

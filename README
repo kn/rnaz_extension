@@ -1,0 +1,282 @@
+RNAz  2.0 Extended
+============
+
+Content
+=======
+
+0. Terms of use
+1. Introduction
+2. Theory
+   2.1. The structure conservation index
+   2.2. Thermodynamic stability
+   2.3. Classification based on both scores
+3. Usage
+   3.1. Installation
+   3.2. Enviroment variable
+   3.3. Invocation
+   3.4. Output
+4. Citing RNAz
+5. Important notes
+6. Contact
+
+0. Terms of use
+===============
+
+Please read the file COPYING for licence terms of RNAz. 
+
+1. Introduction
+===============
+
+RNAz 2.0 Extension is a branch of RNAz 2.0 that adds a new model to
+existing RNAz 2.0. The new model captures co-transcriptional folding,
+structural influences of RNA gene selection and higher moments of
+Boltzmann distribution factors. The model is trained by different
+training data set than other models as the original models were no
+longer available from the authors.
+
+RNAz detects stable and conserved RNA secondary structures in multiple
+sequence alignments. RNAz calculates two independent scores for structural
+conservation (the structure conservation index SCI) and for thermodynamical
+stability (the z-score). High structural conservation (high SCI) and
+thermodynamical stability (negative z-scores) are typical features of
+functional RNAs (e.g. non-coding RNAs or cis-acting regulatory
+elements). RNAz uses both scores to classify a given alignment as
+functional RNA or not. It uses a support vector machine classification
+procedure which estimates a RNA-class probability which can be used as
+convenient overall-score.
+
+For a detailed coverage of all aspects of RNAz we recommend to read the
+manual/tutorial (manual.pdf).
+
+
+2. Theory
+=========
+
+2.1. The structure conservation index
+=====================================
+
+RNAz uses programs from the Vienna RNA package to perform minimum free
+energy (MFE) RNA secondary structure predictions.
+
+First, it calculates the average MFEs for all single sequences in the
+aligment using RNAfold.
+
+Second the complete alignment is folded using RNAalifold. RNAalifold
+implements a consensus folding algorithm which uses essentially the same
+algorithms and energy parameters as RNAfold. It calculates a consensus MFE
+which is composed of an energy term averaging the energy contributions of
+the single sequences and a covariance term rewarding compensatory and
+consistent mutations.
+
+If the sequences in the alignment can fold into a common structure, the
+average MFE and the consensus MFE will be of similar dimension. If there is
+no common structure, the consensus MFE will be higher (i.e. less stable)
+than the average MFE of the single sequences.
+
+Based on this intuitive rationale, a structure conservation index is
+defined:
+
+                       consensus MFE
+                 SCI=  --------------
+                        average MFE
+
+
+The SCI will be around 0 if RNAalifold does not find a consensus structure,
+it will be around 1 if the structure is perfectly conserved. A SCI above 1
+indicates a perfectly conserved secondary structure which is even supported
+by compensatory and/or consistent mutations.
+
+2.2. Thermodynamic stability
+============================
+
+The significance of a predicted MFE as calculated by RNAfold is difficult
+to interpret in absolute terms. It depends on the length and the base
+composition of the sequences (longer sequence => lower MFE, higher
+GC-content => lower MFE). Typically the significane of a MFE is estimated
+by comparing to many random sequences of the same length and base
+composition. If mu is the mean and sigma the standard deviation of the MFEs
+of many random sequences a convenient normalized measure for the
+significance of the native sequence with MFE m is a z-score:
+
+                          m - mu
+                    z = ---------
+                          sigma
+
+RNAz can effeciently calculate z-scores without sampling. Negative z-scores
+indicate that the native sequence is more stable than the random
+background. The unit of z-scores are standard deviations. Random MFEs can
+be roughly approximated by a standard normal distribution which gives an
+impression of associated P values (e.g. z=-2 => P=0.98).
+
+
+
+2.3. Classification based on both scores
+========================================
+
+Both scores represent independent diagnostic features of functional
+RNAs. RNAz combines both into a overall score using a support vector
+machine regression. Depending on the SCI and z, but also the number of
+sequences in the alignment and the mean pairwise identity a RNA
+class-probability is calculated. It should be noted that the level of the
+SCI depends on the sequence similarity. 100% conservation for example
+results in a SCI of 1 per definition but do not hold any information for
+our purpose. Thus, the support vector machine was taught to interpret the
+significance of the SCI depending on the sequence variation.
+
+The confidence level of this RNA-class probability or "RNAz P-value"
+slightly varies depending on the properties of the input alignment. In our
+tests, P=0.5 and P=0.9 had specificities of 96% and 99%.
+
+2.4. Co-transcriptional folding, Structural influences of RNA gene selection and Higher moments of Boltzmann distribution
+=======================================================================================
+
+Please read following papers:
+
+"Co-transcriptional folding is encoded within RNA genes" 
+(http://www.biomedcentral.com/1471-2199/5/10/)
+written by Irmtraud M Meyer and Istvan Miklos.
+
+"An Analysis of Structural Influences on Selection in RNA Genes"
+(http://mbe.oxfordjournals.org/content/26/1/209.full.pdf)
+written by Naila K. Mimouni, Rune B. Lyngso, Sam Griffiths-Jones and Jotun Hein.
+
+"Moments of the Boltzmann distribution for RNA secondary structures"
+(http://ramet.elte.hu/~miklosi/MiklosMeyerNagy.pdf)
+written by Istvan Miklos, Irmtraud M. Meyer and Borbala Nagy.
+
+
+3. Usage
+========
+
+3.1. Installation
+=================
+
+See INSTALL for details.
+
+
+3.3. Invocation
+===============
+
+RNAz [options] [filename]
+
+RNAz takes an alignment file in the ClustalW or MAF format. Available
+command line options:
+
+  -h, --help              Print help and exit
+  -V, --version           Print version and exit
+  -f, --forward           Score forward strand
+  -r, --reverse           Score reverse strand
+  -b, --both-strands      Score both strands
+  -o, --outfile=FILENAME  Output filename
+  -w, --window=START-STOP Score window from START to STOP
+  -p, --cutoff=FLOAT      Probability cutoff
+  -g, --show-gaps         Display alignment with gap  (default=off)
+  -s, --predict-strand    Use strand predictor  (default=off)
+  -t, --rna-features	  Use rna features model (default=off)
+
+
+You can test RNAz on one of the example alignments (installed 
+by default in /usr/local/share/RNAz/examples)
+
+cd /usr/local/share/RNAz/examples
+
+You can test RNAz with old model by:
+RNAz tRNA.aln
+
+You can test RNAz with normal model:
+RNAz -d tRNA.aln
+
+You can test RNAz with new rna features model by:
+RNAz -d -t tRNA.aln
+
+Note: -t option always need -d option along together since RNA features model is trained only for dinucleotide model.
+
+
+3.4. Output
+===========
+
+Please refer to the following commented sample output:
+
+Header:
+
+############################  RNAz 2.0  ##############################
+
+ Sequences: 4
+ Columns: 73
+ Reading direction: forward
+ Mean pairwise identity:  80.82
+ Shannon entropy: 0.31118
+ G+C content: 0.54795
+ Mean single sequence MFE: -25.88
+ Consensus MFE: -25.98
+ Energy contribution: -23.10
+ Covariance contribution:  -2.88
+ Combinations/Pair:   1.43
+ Mean z-score:  -1.37
+ Structure conservation index:   1.00
+ SVM decision value:   1.47
+ SVM RNA-class probability: 0.997262
+ Prediction: RNA
+ Avg CIS(g) and TRANS(g): -0.13870	0.26359
+ Avg MFE structure log probability: -0.628086
+ Avg Diff MFE and Boltzmann Expected Free Energy (per base): 0.025282
+ Avg Boltzmann Variance (per base): 0.000670
+
+######################################################################
+
+Secondary structure predictions:
+
+The next lines summarize the secondary structure predictions in the
+following format:
+
+>sequence name
+SEQUENCE
+STRUCTURE (MFE)
+
+The structure is indicated in dot bracket notation: '.' denotes a unpaired
+base, while '(' and ')' denote base pairs.
+
+The last structure is the RNAalifold consensus structure with the consensus
+MFE (broken down in energy and covariance contribution)
+
+>AF041468.1
+GGGGGUAUAGCUCAGUUGGUAGAGCGCUGCCUUUGCACGGCAGAUGUCAGGGGUUCGAGUCCCCUUACCUCCA
+(((((((..((((........)))).(((((.......))))).....(((((.......)))))))))))). ( -31.60)
+>X54300
+GGGGGUAUAGCUUAGUUGGUAGAGCGCUGCUUUUGCAAGGCAGAUGUCAGCGGUUCGAAUCCGCUUACCUCCA
+(((((((..((((.((.(((((....)))))...)).)))).......(((((.......)))))))))))). ( -27.90)
+>L00194
+GGGGCCAUAGCUCAGUUGGUAGAGCGCCUGCUUUGCAAGCAGGUGUCGUCGGUUCGAAUCCGUCUGGCUCCA
+(((((((..((((........))))(((((((.....)))))))...(.(((.......))).)))))))). ( -32.50)
+>AY017179
+GGGCCGGUAGCUCAGCCUGGGAGAGCGUCGGCUUUGCAAGCCGAAGGCCCCGGGUUCGAAUCCCGGCCGGUCCA
+((((((((...((((((((((...((.((((((.....))))))..)))))))))).))......)))))))). ( -40.40)
+>consensus
+GGGGCUAUAGCUCAGU_UGGUAGAGCGCCGCCUUUGCAAGGCAGAUGUCAGCGGUUCGAAUCCCCUUACCUCCA
+(((((((..((((.........)))).((((((.....)))))).....(((((.......)))))))))))). (-30.98 = -27.72 +  -3.25)
+
+
+6. Citing RNAz
+==============
+
+If you use RNAz in your work please cite:
+
+Washietl S, Hofacker IL, Stadler PF
+Fast and reliable prediction of noncoding RNAs.
+Proc Natl Acad Sci U S A. 102(7):2454-9 (2005)
+
+
+6. Contact
+==========
+
+Please feel free to contact the author for bug-reports, feature-requests,
+suggestions etc. Of course I also look forward to hearing from you if you
+discoverd something biologically interesting using RNAz. 
+
+For RNAz: Stefan Washietl <wash@tbi.univie.ac.at>
+
+For RNA Features: Katsuya Noguchi <katsuya7s@gmail.com>
+
+--
+$Id: README,v 1.5 2006/10/12 16:40:24 wash Exp $
+

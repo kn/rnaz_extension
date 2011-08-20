@@ -1,0 +1,10 @@
+- Calculate z-scores based on a dinucleotide model. Current model 
+  results in a relatively high rate of false positives due to
+  dinucleotide effects.
+- The SCI dependends unexpectedly strong on the GC content 
+  causing RNAz to be biased towards GC rich alignments. This
+  must be fixed in some way. 
+
+--
+$Id: TODO,v 1.4 2006/10/12 16:40:25 wash Exp $
+

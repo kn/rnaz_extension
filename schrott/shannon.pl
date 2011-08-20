@@ -1,0 +1,143 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Bio::SimpleAlign;
+use Bio::AlignIO;
+
+
+
+sub log_base
+{
+    my ($base, $value) = @_;
+    return log($value)/log($base);
+}
+
+sub shannon
+{
+    my @input = @{$_[0]};
+    
+    my @probabilities = ( );
+    my $entropy = 0;
+    
+    if (($#input+1) > 0)
+    {
+        for my $i (0 .. 4)
+        {
+            $probabilities[$i] = 0;
+        }
+        
+        foreach my $i (@input)
+        {
+            if ($i eq 'A') { $probabilities[0]++ }
+            if ($i eq 'C') { $probabilities[1]++ }
+            if ($i eq 'G') { $probabilities[2]++ }
+            if ($i eq 'T' or $i eq 'U') { $probabilities[3]++ }
+            if ($i=~m/(B|D|E|F|H|I|J|K|L|M|N|O|P|Q|R|S|V|W|X|Y|Z|-)/) { $probabilities[4]++ }
+        }
+    
+        for my $i (0 .. 4)
+        {
+            $probabilities[$i] = $probabilities[$i]/($#input+1);
+	    
+            if ($probabilities[$i] > 0)
+            {
+                $entropy += $probabilities[$i]*log_base(2,$probabilities[$i]);
+            }
+        }
+        
+        $entropy = $entropy * (-1);
+    }
+    
+    return $entropy;
+}
+
+sub getEntropy
+{
+    my $aln = shift;    
+    my $entropy = 0;
+    my @masterARRAY = ( );
+    foreach my $seq ( $aln->each_seq() ) 
+    {
+        my @tmp = split(//, $seq->seq());
+        push @masterARRAY, \@tmp;
+    }
+
+    my $flag = 0;
+    my $k = 0;
+    while ($flag == 0)
+    {
+        my @bases = ( );
+        foreach my $ref (@masterARRAY)
+        {
+            my $size = scalar @{$ref};
+            
+            if ($size > 0)
+            {
+                my $base = shift @{$ref};
+                push @bases, $base;
+            }
+            else
+            {
+                $flag = 1;
+                last;
+            }
+        }
+	
+	my $tmp = shannon(\@bases);
+        $entropy += $tmp;
+	$k++;
+    }
+    return $entropy;
+}
+
+sub MPI
+{
+    my $aln_bp = $_[0];
+
+    my @tmp = ( );
+    foreach my $seq ( $aln_bp->each_seq() ) 
+    {
+	my $sequence = $seq->seq();
+	$sequence =~ s/(B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|V|W|X|Y|Z)/N/g;
+	push @tmp, $sequence;
+    }
+
+    my $pairs=0;
+    my $matches=0;
+
+    my @aln = ( );
+    foreach my $seq (@tmp)
+    {
+	my @temp = split(//, $seq);
+	push @aln, \@temp;
+    }
+    
+    for my $i (0..$#aln){
+	for my $j ($i+1..$#aln){
+	    for my $k (0..(@{$aln[0]}-1)){
+		#if (($aln[$i][$k] ne '-') or ($aln[$j][$k] ne '-')){
+                if ($aln[$i][$k] eq $aln[$j][$k]){
+		    $matches++;
+                }
+                $pairs++;
+		#}
+	    }
+	}
+    }
+    return sprintf ("%.5f",$matches/$pairs*100);
+}
+
+my $file = $ARGV[0];
+
+# read file
+my $stream = new Bio::AlignIO(-format => 'clustalw', 
+			      -file => "$file");
+my $aln = $stream->next_aln();
+
+
+
+my $k = $aln->no_sequences();
+my $entropy = getEntropy($aln)/$aln->length();
+my $mpi = MPI($aln);
+
+print "$k,$mpi,$entropy\n";

@@ -1,0 +1,168 @@
+svm_helper.o svm_helper.o: svm_helper.c ../config.h /usr/include/stdio.h \
+  /usr/include/_types.h /usr/include/sys/_types.h \
+  /usr/include/sys/cdefs.h /usr/include/machine/_types.h \
+  /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+  /usr/include/secure/_common.h /usr/include/stdlib.h \
+  /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+  /usr/include/sys/wait.h /usr/include/sys/signal.h \
+  /usr/include/sys/appleapiopts.h /usr/include/machine/signal.h \
+  /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+  /usr/include/sys/_structs.h /usr/include/machine/_structs.h \
+  /usr/include/mach/i386/_structs.h /usr/include/sys/resource.h \
+  /usr/include/machine/endian.h /usr/include/i386/endian.h \
+  /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+  /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
+  /usr/include/machine/types.h /usr/include/i386/types.h \
+  /usr/include/i386/_types.h /usr/include/math.h \
+  /usr/include/architecture/i386/math.h /usr/include/ctype.h \
+  /usr/include/runetype.h /usr/include/string.h \
+  /usr/include/secure/_string.h ../libsvm-2.89/svm.h svm_helper.h \
+  rnaz_utils.h ../librna2/utils.h ../models/mfe_stdv.inc \
+  ../models/mfe_avg.inc ../models/decision.inc \
+  ../models/decision_dinucleotide.inc \
+  ../models/decision_dinucleotide_structural.inc \
+  ../models/decision_rna_features.inc ../models/L50-200_GC20-30_avg.inc \
+  ../models/L50-200_GC20-30_stdv.inc ../models/L50-200_GC30-36_avg.inc \
+  ../models/L50-200_GC30-36_stdv.inc ../models/L50-200_GC36-40_avg.inc \
+  ../models/L50-200_GC36-40_stdv.inc ../models/L50-200_GC40-46_avg.inc \
+  ../models/L50-200_GC40-46_stdv.inc ../models/L50-200_GC46-50_avg.inc \
+  ../models/L50-200_GC46-50_stdv.inc ../models/L50-200_GC50-56_avg.inc \
+  ../models/L50-200_GC50-56_stdv.inc ../models/L50-200_GC56-60_avg.inc \
+  ../models/L50-200_GC56-60_stdv.inc ../models/L50-200_GC60-66_avg.inc \
+  ../models/L50-200_GC60-66_stdv.inc ../models/L50-200_GC66-70_avg.inc \
+  ../models/L50-200_GC66-70_stdv.inc ../models/L50-200_GC70-80_avg.inc \
+  ../models/L50-200_GC70-80_stdv.inc
+
+../config.h:
+
+/usr/include/stdio.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/secure/_stdio.h:
+
+/usr/include/secure/_common.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/sys/wait.h:
+
+/usr/include/sys/signal.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/signal.h:
+
+/usr/include/i386/signal.h:
+
+/usr/include/i386/_structs.h:
+
+/usr/include/sys/_structs.h:
+
+/usr/include/machine/_structs.h:
+
+/usr/include/mach/i386/_structs.h:
+
+/usr/include/sys/resource.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/i386/endian.h:
+
+/usr/include/sys/_endian.h:
+
+/usr/include/libkern/_OSByteOrder.h:
+
+/usr/include/libkern/i386/_OSByteOrder.h:
+
+/usr/include/alloca.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/i386/types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/math.h:
+
+/usr/include/architecture/i386/math.h:
+
+/usr/include/ctype.h:
+
+/usr/include/runetype.h:
+
+/usr/include/string.h:
+
+/usr/include/secure/_string.h:
+
+../libsvm-2.89/svm.h:
+
+svm_helper.h:
+
+rnaz_utils.h:
+
+../librna2/utils.h:
+
+../models/mfe_stdv.inc:
+
+../models/mfe_avg.inc:
+
+../models/decision.inc:
+
+../models/decision_dinucleotide.inc:
+
+../models/decision_dinucleotide_structural.inc:
+
+../models/decision_rna_features.inc:
+
+../models/L50-200_GC20-30_avg.inc:
+
+../models/L50-200_GC20-30_stdv.inc:
+
+../models/L50-200_GC30-36_avg.inc:
+
+../models/L50-200_GC30-36_stdv.inc:
+
+../models/L50-200_GC36-40_avg.inc:
+
+../models/L50-200_GC36-40_stdv.inc:
+
+../models/L50-200_GC40-46_avg.inc:
+
+../models/L50-200_GC40-46_stdv.inc:
+
+../models/L50-200_GC46-50_avg.inc:
+
+../models/L50-200_GC46-50_stdv.inc:
+
+../models/L50-200_GC50-56_avg.inc:
+
+../models/L50-200_GC50-56_stdv.inc:
+
+../models/L50-200_GC56-60_avg.inc:
+
+../models/L50-200_GC56-60_stdv.inc:
+
+../models/L50-200_GC60-66_avg.inc:
+
+../models/L50-200_GC60-66_stdv.inc:
+
+../models/L50-200_GC66-70_avg.inc:
+
+../models/L50-200_GC66-70_stdv.inc:
+
+../models/L50-200_GC70-80_avg.inc:
+
+../models/L50-200_GC70-80_stdv.inc:
