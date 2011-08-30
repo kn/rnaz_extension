@@ -2,12 +2,11 @@
  *                                                                   *
  *                              RNAz.c                               *
  *                                                                   *
- *	Assess alignments for exceptionally stable and/or conserved  *
- *	secondary structures using RNAalifold/RNAfold and SVMs.      *
+ *	Assess alignments for exceptionally stable and/or conserved      *
+ *	secondary structures using RNAalifold/RNAfold and SVMs.          *
  *                                                                   *
- *	          c Stefan Washietl, Ivo L Hofacker                  *
+ *	       c Stefan Washietl, Ivo L Hofacker, Katsuya Noguchi        *
  *                                                                   *
- *	   $Id: RNAz.c,v 1.12 2006/10/12 16:58:18 wash Exp $         *
  *                                                                   *
  *********************************************************************/
 
@@ -479,6 +478,10 @@ int main(int argc, char *argv[])
 	  if (decision_model_type == 3) {
 	    fprintf(out," Background model: dinucleotide\n");
 	    fprintf(out," Decision model: structural RNA alignment quality\n");
+	  }
+	  if (decision_model_type == 4) {
+		fprintf(out," Background model: dinucleotide\n");
+	    fprintf(out," Decision model: structural RNA alignment quality with RNAFeatures\n");
 	  }
  	  fprintf(out," SVM decision value: %6.2f\n",decValue); 
  	  fprintf(out," SVM RNA-class probability: %6f\n",prob); 

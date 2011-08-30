@@ -5,9 +5,8 @@
  *   Functions relating to SVM regression/classification and         *
  *    for interacting with the SVMLIB libraries                      *
  *                                                                   *
- *	          c Stefan Washietl, Ivo L Hofacker                  *
+ *	     c Stefan Washietl, Ivo L Hofacker, Katsuya Noguchi          *
  *                                                                   *
- *	   $Id: svm_helper.c,v 1.5 2006/07/31 13:34:08 wash Exp $    *
  *                                                                   *
  *********************************************************************/
 
